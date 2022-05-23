@@ -81,8 +81,15 @@ def scrapeIAVE(tipo, ano, epocic):
         ficheiros = documentos.find_all(class_='each-doc')
         for ficheiro in ficheiros:
             # encontrar e "tratar" nome do ficheiro
+            filetitle = ficheiro.find(class_='title')
+            fileversion = filetitle.find(class_='doc-version')
+            if fileversion: fileversion = fileversion.getText()
             filename = ficheiro.find(class_='title').getText()
             filename = str(filename).strip()
+            # print(fileversion)
+            fileversion = str(fileversion).strip()
+            filename = filename.replace(fileversion, '')
+            # print(filename)
             audioscontainer = ficheiro.find(class_='links-container')
             if audioscontainer:
                 audios = audioscontainer.find_all(class_='audios-links')
@@ -97,7 +104,7 @@ def scrapeIAVE(tipo, ano, epocic):
                         'nome': audioname,
                         'url': audiopath
                     })
-                print(filename+"\nend")
+                # print(filename+"\nend")
                 # não é a melhor solução
                 if "Guiões" in filename:
                     filename = "Guiões"
@@ -110,10 +117,17 @@ def scrapeIAVE(tipo, ano, epocic):
                 # encontrar url para o ficheiro
                 filepath = ficheiro.find(class_='title')['href']
                 # criar dict com os dados do ficheiro
-                filesArr.append({
-                    'nome': filename,
-                    'url': filepath
-                })
+                if fileversion == "None":
+                    filesArr.append({
+                        'nome': filename,
+                        'url': filepath,
+                    })
+                else:
+                    filesArr.append({
+                        'nome': filename,
+                        'url': filepath,
+                        'versao': fileversion,
+                    })
         # por cada disciplina, adicionar à lista final os seus dados
         arr.append({
             'disciplina': nome,
