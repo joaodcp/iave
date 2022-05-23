@@ -1,4 +1,4 @@
-from flask import Flask, make_response
+from flask import Flask, make_response, jsonify
 from services import scraper, gtsearch
 app = Flask(__name__)
 
@@ -6,7 +6,7 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 @app.route('/api/obterProvas/<tipo>/<ano>/<epocic>', methods=['GET'])
 def returnProvas(tipo, ano, epocic):
-    res = make_response(scraper.scrapeIAVE(tipo, ano, epocic))
+    res = make_response(jsonify(scraper.scrapeIAVE(tipo, ano, epocic)))
     return res
  
 @app.route('/api/globalTextSearch/<filtered>', methods=['GET'])
