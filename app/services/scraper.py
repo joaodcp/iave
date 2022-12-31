@@ -72,7 +72,7 @@ def scrapeIAVE(tipo, ano, epocic):
             return 'Indique um ciclo válido.'
     
     url = 'https://iave.pt/provas-e-exames/arquivo/' + tipos[tipo] + '/?ano=' + ano
-    if ano == str(getLastAvailableYear(tipo)):
+    if ano == str(currentYear):
         url = f"https://iave.pt/provas-e-exames/provas-e-exames/{tipos[tipo].replace('arquivo-', '')}/"
 
     page = requests.get(url)
